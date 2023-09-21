@@ -25,7 +25,7 @@ def findEncodings(images):
 encoded_face_train = findEncodings(images)
 
 def markAttendance(name):
-    with open('/home/postman/fr/Attendance.csv','r+') as f:
+    with open('attendance.csv','r+') as f:
         myDataList = f.readlines()
         nameList = []
         for line in myDataList:
@@ -58,7 +58,7 @@ while True:
             cv2.rectangle(img,(x1,y1),(x2,y2),(0,255,0),2)
             cv2.rectangle(img, (x1,y2-35),(x2,y2), (0,255,0), cv2.FILLED)
             cv2.putText(img,name, (x1+6,y2-5), cv2.FONT_HERSHEY_COMPLEX,1,(255,255,255),2)
-            # markAttendance(name)
+            markAttendance(name)
     cv2.imshow('webcam', img)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
