@@ -44,6 +44,14 @@ def markAttendance(name):
             date = now.strftime('%d-%B-%Y')
             f.writelines(f'n{name}, {time}, {date}')
 
+
+def preprocess_face(img):
+    # Convert to grayscale for histogram equalization
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # Apply histogram equalization
+    equ = cv2.equalizeHist(gray)
+    return equ
+
 # take pictures from webcam 
 tracemalloc.start()
 cap  = cv2.VideoCapture(0)
@@ -51,8 +59,9 @@ while True:
     
     success, img = cap.read()
     imgS = cv2.resize(img, (0,0), None, 0.25,0.25)
+    imgS = preprocess_face(imgS)
     imgS = cv2.cvtColor(imgS, cv2.COLOR_BGR2RGB)
-    faces_in_frame = face_recognition.face_locations(imgS)
+    faces_in_frame = face_recognition.face_locations(imgS,number_of_times_to_upsample=2)
     encoded_faces = face_recognition.face_encodings(imgS, faces_in_frame)
     current, peak = tracemalloc.get_traced_memory()
     print(f"Memory usage: {current / 10**6} MB (Peak: {peak / 10**6} MB)")
